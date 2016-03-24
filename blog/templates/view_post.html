@@ -1,0 +1,59 @@
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}{{ post.title }} 글 보기{% endblock %}
+
+{% block content %}
+<div class="post_container">
+    <div>
+        <h3>
+            <a href="{% url 'view_post' pk=post.pk %}">{{ post.title }}</a>
+        </h3>
+            <a href="{% url 'edit_post' pk=post.pk %}">
+                <button type="button" class="btn btn-default btn-xs">수정</button>
+            </a>
+            <a href="{% url 'delete_post' pk=post.pk %}">
+                <button type="button" class="btn btn-default btn-xs">삭제</button>
+            </a>
+            <a href="{% url 'list_posts' %}">
+                <button type="button" class="btn btn-info btn-xs">전체 글 목록</button>
+            </a>
+            <hr width="50%" align="left" />
+      </div>
+
+
+    <div class="post_content">
+        <p>{{ post.content | linebreaks | default:"내용 없음."  }}</p> <!-- linebreaks로 엔터를 살릴 수 있다 -->
+    </div><br><br>
+
+    <div>
+        <p>카테고리 : {{ post.category.name }}</p>
+        <p>작성일시 : {{ post.created_at | date:"Y-m-d, H:i:s" }}</p>
+    </div>
+    <hr width="50%" align="left" />
+
+</div>
+
+{% with comments=post.comment_set.all %}
+    {% include 'list_comments.html' %}
+{% endwith %}<br>
+
+
+<form method="POST" action="" class="form-horizontal">
+    {% csrf_token %}
+
+    <div class="form-group form-group-sm">
+
+        <p>&emsp;댓글 입력</p>
+        <p>
+        &emsp;<textarea rows="4" cols="40" name="content"></textarea>
+        </p>
+
+        <p>
+        &emsp;{% bootstrap_button "댓글달기" button_type="submit" button_class="btn-primary" %}
+        </p>
+    </div>
+
+</form>
+
+{% endblock %}

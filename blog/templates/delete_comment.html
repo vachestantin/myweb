@@ -1,0 +1,20 @@
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}댓글 삭제 {% endblock %}
+{% block content %}
+    <h3>{{ comment.content }} <font size=4>:삭제 확인</font></h3>
+    <form method="POST" action="" >
+        {% csrf_token %}
+        <p>
+            이 댓글을 삭제하시겠습니까?
+        </p>
+
+        {% bootstrap_button "삭제" button_type="submit" button_class="btn-primary" %}
+        <a href="{% url 'view_post' pk=comment.post.pk %}">
+            <button type="button" class="btn btn-primary">취소</button>
+        </a>
+
+    </form>
+
+        {% endblock %}

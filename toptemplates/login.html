@@ -1,0 +1,49 @@
+{% load bootstrap3 %}
+<html>
+    <head>
+        <title>{% block page_title%}MyWeb에 오신 것을 환영합니다.{% endblock%}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+
+    <body class="container">
+        <br>
+        {% if form.errors %}
+        <p>아이디 또는 비밀번호가 일치하지 않습니다. </p>
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+        <p>{{ request.user }}님은 이미 로그인 되어 있습니다. </p>
+        <p>로그아웃 하시겠습니까?
+            &nbsp;<a href="{% url 'logout_url' %}" class="btn btn-default btn-xs" role="button">&emsp;예&emsp;</a>
+            &nbsp;<a href="{% url 'list_posts' %}" class="btn btn-default btn-xs" role="button">&nbsp;아니요&nbsp;</a></p>
+
+        {% else %}
+        <form method="POST" action="{% url 'login_url' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+
+        <table>
+            <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>&nbsp;</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label_tag }}</td>
+                <td>&nbsp;</td>
+                <td>{{ form.password }}</td>
+            </tr>
+        </table><br>
+
+        {% bootstrap_button "로그인" button_type="submit" button_class="btn-primary" %}
+        <a class="btn btn-primary" href="{% url 'list_posts' %}" role="button"> 취소 </a>
+
+        {% endif %}
+    </body>
+</html>

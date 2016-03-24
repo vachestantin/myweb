@@ -1,0 +1,37 @@
+{% extends 'blog_layout.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}글 목록 {% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+    <div class="post_container">
+        <h3><a href="{% url 'view_post' pk=post.pk %}">{{ post.title | truncatewords:"5" }}</a><small >&emsp;  by {{ post.user }}</small></h3>
+        <hr width="50%" align="left" />
+
+        <div class="post_content">
+            <p>{{ post.content | truncatewords:"100" }}</p>
+
+        </div>
+
+        <div>
+            <p>카테고리 : {{ post.category.name }}</p>
+            <p>작성일시 : {{ post.created_at | date:"Y-m-d, H:i:s" }}</p>
+        </div><br>
+    </div>
+    {% empty %}
+        <p>글이 전혀 없습니다.</p>
+    {% endfor %}
+
+    <br>
+    <a href="{% url 'create_post' %}">
+        <button type="button" class="btn btn-info btn-sm">새글 작성</button>
+    </a>
+    <a href="{% url 'list_posts' %}">
+        <button type="button" class="btn btn-info btn-sm">페이지 새로고침</button>
+    </a>
+
+    <br>
+    {% bootstrap_pagination posts %}
+
+{% endblock %}
