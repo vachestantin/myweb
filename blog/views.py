@@ -44,13 +44,12 @@ def view_post(request, pk):
 
         if new_comment.content == "": # 내용이 없는 댓글은 달리지 않는다. 하지만 스페이스를 입력하면 댓글이 달림..
             pass
+        elif not request.user.is_authenticated():
+            return redirect('login_url')
         else:
-            if request.user is not None:
-                new_comment.user = request.user
-                new_comment.save()
-                return redirect('view_post', pk=the_post.pk)
-            else: # request.user is None
-                return redirect('login_url')
+            new_comment.user = request.user
+            new_comment.save()
+            return redirect('view_post', pk=the_post.pk)
 
     return render(request, 'view_post.html', {
         'post': the_post,
@@ -69,8 +68,11 @@ def create_post(request):
             new_post = form.save(commit=False) # 커밋을 하지 않은 상태여야지 유저정보를 같이 저장할 수 있다.
             new_post.user = request.user
             new_post.save()
-            make_thumbnail.delay(new_post.photo.path, 100, 100)
-            return redirect('view_post', pk=new_post.pk)
+            if new_post.photo == None: # 사진이 없으면 그냥 넘어가고
+                return redirect('view_post', pk=new_post.pk)
+            else: # 사진이 있으면 썸네일 만들기
+                make_thumbnail.delay(new_post.photo.path, 100, 100)
+                return redirect('view_post', pk=new_post.pk)
 
     return render(request, 'create_post.html', {
         'form': form,
