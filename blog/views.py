@@ -42,8 +42,10 @@ def view_post(request, pk):
         new_comment.content = request.POST.get('content')
         new_comment.post = the_post
 
-        if new_comment.content == "": # 내용이 없는 댓글은 달리지 않는다. 하지만 스페이스를 입력하면 댓글이 달림..
-            pass
+        if new_comment.content == '': # 내용이 없는 댓글은 달리지 않는다. 하지만 스페이스를 입력하면 댓글이 달림..
+            raise PermissionDenied
+        elif new_comment.content.isspace(): # 스페이스를 입력하면 댓글이 달리지 않는다
+            raise PermissionDenied
         elif not request.user.is_authenticated():
             return redirect('login_url')
         else:
@@ -83,17 +85,20 @@ def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     categories = Category.objects.all()
 
-    if request.method == 'GET':
-        pass
-    elif request.method == 'POST':
-        post_edit = request.POST
-        post.title = post_edit['title']
-        post.content = post_edit['content']
+    if post.user == request.user:
+        if request.method == 'GET':
+            pass
+        elif request.method == 'POST':
+            post_edit = request.POST
+            post.title = post_edit['title']
+            post.content = post_edit['content']
 
-        category = get_object_or_404(Category, pk=post_edit['category'])
-        post.category = category
-        post.save()
-        return redirect('view_post', pk=post.pk)
+            category = get_object_or_404(Category, pk=post_edit['category'])
+            post.category = category
+            post.save()
+            return redirect('view_post', pk=post.pk)
+    else:
+        raise PermissionDenied
 
     return render(request, 'edit_post.html', {
         'post': post,

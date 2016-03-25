@@ -34,11 +34,15 @@ class PostTest(TestCase):
             # User.objects.create_user(username='test1', password ='12345678') 이거를 하고 싶은거다.
 
         self.urls = namedtuple('URL', ( # namedtuple을 사용해서 함수 이름과 기능들을 차례대로 연결하는 것.
-            'create_post', 'delete_post', 'view_post', 'list_posts',
+            'create_post', 'edit_post', 'delete_post', 'view_post', 'list_posts',
             'create_comment', 'delete_comment',
         ))(
             # 게시물 작성하는 URL name 은 'create_post'
             lambda : reverse('create_post'),
+
+            # 개별 게시물 지우는 URL name 은 'edit_post'이며,
+            # URL패턴의 그룹은 pk.
+            lambda pk: reverse('edit_post', kwargs={'pk': pk}),
 
             # 개별 게시물 지우는 URL name 은 'delete_post'이며,
             # URL패턴의 그룹은 pk.
@@ -64,15 +68,13 @@ class PostTest(TestCase):
         self.category.save()
 
     # @unittest.skip
-    def _login(self, username, password):
-        # 로그인 시도.
+    def _login(self, username, password): # 로그인 시도.
         return self.client.post(
             settings.LOGIN_URL, {'username': username, 'password': password}
         )
 
     # @unittest.skip
-    def _add_post(self, data, follow=True):
-        # 게시물 게시 시도.
+    def _add_post(self, data, follow=True): # 게시물 게시 시도.
         return self.client.post(
             self.urls.create_post(), data=data, follow=follow # 람다를 사용해서 create_post를 함수로 만들었다.
         )
@@ -205,6 +207,30 @@ class PostTest(TestCase):
         )
         # 로그인 URL로 redirect 됐는지 확인.
         self.assertEqual(response.resolver_match.func.__name__, 'login')
+
+    # @unittest.skip
+    def test_edit_post_without_permm(self): # 권한 없이 개별 게시물을 수정하는 시도하는 테스트
+        _form_data = {
+            'category': self.category.pk,
+            'title': 'Sjfdlkja23@#$!@SDF title',
+            'content': 'FSAD@3@#$!sdflkj content',
+        }
+        self._login(**self.users[0])
+        # 게시물 게시 시도.
+        response = self._add_post(_form_data)
+        self.assertIn(response.status_code, (200, 201,))
+        latest_post = models.Post.objects.latest('pk')
+
+        # test1 로그아웃
+        self.client.get(settings.LOGOUT_URL)
+        # test2 로그인
+        self._login(**self.users[1])
+
+        _edit_post_url = self.urls.edit_post(latest_post.pk)
+        # http method POST로 접근.
+        response = self.client.post(_edit_post_url, follow=True)
+        # 권한이 없으므로 403 status 응답해야 함.
+        self.assertEqual(response.status_code, 403)
 
     # @unittest.skip
     def test_delete_post_without_permm(self): # 권한 없이 개별 게시물을 지우는 시도하는 테스트

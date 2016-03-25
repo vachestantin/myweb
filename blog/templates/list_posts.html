@@ -6,11 +6,11 @@
 {% block content %}
     {% for post in posts %}
     <div class="post_container">
-        <h3><a href="{% url 'view_post' pk=post.pk %}">{{ post.title | truncatewords:"5" }}</a><small >&emsp;  by {{ post.user }}</small></h3>
+        <h3><a href="{% url 'view_post' pk=post.pk %}">{{ post.title | truncatechars:"30" }}</a><small >&emsp;  by {{ post.user }}</small></h3>
         <hr width="50%" align="left" />
 
         <div class="post_content">
-            <p>{{ post.content | truncatewords:"100" }}</p>
+            <p>{{ post.content | truncatechars:"500" }}</p>
 
         </div>
 
