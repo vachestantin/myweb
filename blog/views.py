@@ -45,9 +45,12 @@ def view_post(request, pk):
         if new_comment.content == "": # 내용이 없는 댓글은 달리지 않는다. 하지만 스페이스를 입력하면 댓글이 달림..
             pass
         else:
-            new_comment.user = request.user
-            new_comment.save()
-            return redirect('view_post', pk=the_post.pk)
+            if request.user is not None:
+                new_comment.user = request.user
+                new_comment.save()
+                return redirect('view_post', pk=the_post.pk)
+            else: # request.user is None
+                return redirect('login_url')
 
     return render(request, 'view_post.html', {
         'post': the_post,

@@ -1,6 +1,8 @@
 
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class Post(models.Model):
@@ -22,6 +24,13 @@ class Post(models.Model):
     class Meta: # 디폴트 정렬 기준 설정 - 가장 최근글 우선
         ordering = ('-created_at', '-pk')
 
+
+@receiver(post_delete, sender=Post)
+def delete_attached_immage(sender, **kwargs):
+    instance = kwargs.pop('instance')
+    instance.photo.delete(save=False) # 이 명령이 사진 파일까지 지우게 된다. save가 True이면 삭제한 글이 자꾸 부활할 것이다.
+
+
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     post = models.ForeignKey(Post)
@@ -32,11 +41,13 @@ class Comment(models.Model):
     def __str__(self):
         return '({}) - {}.{} : {}'.format(self.pk, self.post.pk, self.post.title, self.content)
 
+
 class Tag(models.Model):
      name = models.CharField(max_length=40)
 
      def __str__(self):
         return '({}) {}'.format(self.pk, self.name)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=40)

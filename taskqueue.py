@@ -23,8 +23,9 @@ def make_thumbnail(path, width, height):
     im.thumbnail((width, height, ), Image.ANTIALIAS) # ANTIALIAS는 튀는 부분을 막아준다..(검색해봐야지)
     im.save(output_path)
     im.close()
-
     return output_path
+
+
 
 @app.task
 def add(a, b):
