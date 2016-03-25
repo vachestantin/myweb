@@ -10,18 +10,18 @@
         {% bootstrap_css %}
         {% bootstrap_javascript %}
 
+        <style>
+            img { max-width: 100%; }
+        </style>
+
         <font color="grey" size="7">MyWeb (testing)</font>
 
         {% if request.user.is_authenticated %}
         &emsp;{{ request.user }}님! &nbsp;<a href="{% url 'logout_url' %}" class="btn btn-default btn-xs" role="button"> 로그아웃 </a><br>
 
-
         {% else %}
         &emsp;<a href="{% url 'login_url' %}" class="btn btn-xm" role="button">로그인</a><br>
         {% endif %}
-
-
-
     </head>
 
     <body class="container">

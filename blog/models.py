@@ -1,17 +1,18 @@
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL) # 유저만이 글을 쓸 수 있음
     title = models.CharField(max_length=200, db_index=True)
     content = models.TextField(blank=False) # 제한이 없는 아주 큰 문자열
+    photo = models.ImageField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True) # 처음 데이터가 들어갈때 생성 일시가 자동으로 들어가도록
     updated_at = models.DateTimeField(auto_now=True) # 저장 시점의 일시 정보를 입력
 
     tag = models.ManyToManyField('Tag', blank=True) # 'Tag' 모델 클래스의 이름을 문자열로 하는 이유는 장고가 나중에 처리하도록 하기 위해서. 문자열이 아닐 경우 Post 클래스보다 앞에 있어야 함.
-    category = models.ForeignKey('Category', null=False, blank=False) # null은 db에서 사용하는 것 blank는 폼에서 사용하는 것
+    category = models.ForeignKey('Category', blank=False, null=False) # blank는 폼에서 사용하는 것 null은 db에서 사용하는 것
 
     is_model_field = False
 
@@ -24,7 +25,7 @@ class Post(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     post = models.ForeignKey(Post)
-    content = models.TextField()
+    content = models.TextField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

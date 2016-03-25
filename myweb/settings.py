@@ -112,7 +112,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+# 실 서비스 환경에서 사용하는 경로
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_deploy') # 얘는 그냥 하나, 리스트나 튜플 아님
+
+# 개발 환경에서 사용하는 경로
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_develop'),
+]
+
+# media file 설정과 static file 설정이 같으면 안됨
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload_files')
 
 LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/logout/'

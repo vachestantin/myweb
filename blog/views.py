@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Comment, Category, Tag
 from .forms import PostEditForm
 
+from taskqueue import make_thumbnail
+
 
 def list_posts(request):
     per_page = 3
@@ -57,13 +59,14 @@ def create_post(request):
     categories = Category.objects.all()
 
     if request.method == 'GET':
-        form = PostEditForm(request.POST)
+        form = PostEditForm()
     elif request.method == 'POST':
-        form = PostEditForm(request.POST)
+        form = PostEditForm(request.POST, request.FILES)
         if form.is_valid():
-            new_post = form.save(commit = False) # 커밋을 하지 않은 상태여야지 유저정보를 같이 저장할 수 있다.
+            new_post = form.save(commit=False) # 커밋을 하지 않은 상태여야지 유저정보를 같이 저장할 수 있다.
             new_post.user = request.user
             new_post.save()
+            make_thumbnail.delay(new_post.photo.path, 100, 100)
             return redirect('view_post', pk=new_post.pk)
 
     return render(request, 'create_post.html', {

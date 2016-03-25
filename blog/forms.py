@@ -7,7 +7,7 @@ from .models import Post
 class PostEditForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content', 'tag', 'category',)
+        fields = ('title', 'content', 'photo', 'tag', 'category',)
         # exclude = ('title', 'category', ) # 사용하지 않을 필드만을 명시하는 기능
         # fields = '__all__' # 전체를 포함하고 싶은 경우
 

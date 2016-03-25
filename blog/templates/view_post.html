@@ -3,6 +3,7 @@
 
 {% block page_title %}{{ post.title }} 글 보기{% endblock %}
 
+
 {% block content %}
 <div class="post_container">
     <div>
@@ -21,6 +22,9 @@
             <hr width="50%" align="left" />
       </div>
 
+    {% if post.photo %}
+        <img src="{{ post.photo.url }}" />
+    {% endif %}
 
     <div class="post_content">
         <p>{{ post.content | linebreaks | default:"내용 없음."  }}</p> <!-- linebreaks로 엔터를 살릴 수 있다 -->
