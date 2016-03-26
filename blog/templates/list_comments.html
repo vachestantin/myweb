@@ -2,7 +2,10 @@
   <br><h4>댓글</h4>
     {% for comment in comments %}
     <div>
-        <div style="display:inline" class="comment_info">{{ comment.user }} <font color=darkgrey size=1>| {{ comment.created_at }} |</font></div>
+        <div style="display:inline" class="comment_info">
+            <font color=#353535 font-weight=bold size=3 font-family=Arial> {{ comment.user }} </font>
+            <font color=darkgrey size=1>| {{ comment.created_at }} |</font>
+        </div>
         <a href="{% url 'delete_comment' pk=comment.pk %}">
             <button type="button" class="btn btn-link btn-xs">댓글삭제</button>
         </a>
