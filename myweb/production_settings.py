@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@gqd@(c#5lf=pn^-jb!tq(u6mojk-nazosmt&j=^)660u5rivb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -73,7 +73,7 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'testdb',
-        'HOST': 'jake.cck1yrcarnkf.ap-northeast-1.rds.amazonaws.com:3306',
+        'HOST': 'jake.cck1yrcarnkf.ap-northeast-1.rds.amazonaws.com',
         'USER': 'admin',
         'PASSWORD': os.environ.get('MYWEB_DB_PW'),
     }

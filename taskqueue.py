@@ -24,15 +24,3 @@ def make_thumbnail(path, width, height):
     im.save(output_path)
     im.close()
     return output_path
-
-
-
-@app.task
-def add(a, b):
-    time.sleep(5)
-    return a+b
-
-@app.task
-def sum2(values):
-    time.sleep(5)
-    return sum(values)

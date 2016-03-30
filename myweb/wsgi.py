@@ -3,7 +3,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-env = os.environ.get('MYWEB_ENV', '')
+env = os.environ.get('MYWEB_ENV')
 
 if env:
     if not env.endswith('_settings'):
