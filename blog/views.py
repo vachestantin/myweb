@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import Http404#, HttpResponse
+from django.http import Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.exceptions import PermissionDenied
 
@@ -11,6 +11,9 @@ from .forms import PostEditForm
 
 from taskqueue import make_thumbnail
 
+
+def hello(request):
+    return HttpResponse('hello world')
 
 def list_posts(request):
     per_page = 3
@@ -60,8 +63,6 @@ def view_post(request, pk):
 
 @login_required
 def create_post(request):
-    categories = Category.objects.all()
-
     if request.method == 'GET':
         form = PostEditForm()
     elif request.method == 'POST':
@@ -83,27 +84,25 @@ def create_post(request):
 @login_required
 def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    categories = Category.objects.all()
 
     if post.user == request.user:
-        if request.method == 'GET':
-            pass
-        elif request.method == 'POST':
-            post_edit = request.POST
-            post.title = post_edit['title']
-            post.content = post_edit['content']
-
-            category = get_object_or_404(Category, pk=post_edit['category'])
-            post.category = category
-            post.save()
-            return redirect('view_post', pk=post.pk)
+        if request.method == "POST":
+            form = PostEditForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.user = request.user
+                post.save()
+                return redirect('view_post', pk=post.pk)
+        else:
+            form = PostEditForm(instance=post)
     else:
-        raise PermissionDenied
+        return HttpResponse('수정 권한이 없습니다.')
 
     return render(request, 'edit_post.html', {
+        'form': form,
         'post': post,
-        'categories': categories,
     })
+
 
 @login_required
 def delete_post(request, pk):

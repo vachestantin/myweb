@@ -4,35 +4,20 @@
 {% block page_title %}글 수정 {% endblock %}
 
 {% block content %}
-        <form method="POST" action="" class="form-horizontal">
-            {% csrf_token %}
-            <br><div class="form-group form-group-sm">
-                <p>카테고리:
-                    <select name="category">
-                    {% for category in categories %}
-                    <option value="{{ category.pk }}">{{ category.name }}</option>
-                    {% endfor %}
-                    </select>
-                </p>
+    <br>
+    <form method="POST" action="" class="form-horizontal">
+    {% csrf_token %}
 
-                <div>
-                <p>제목:</p>
-                <input type="text" size="40" name="title" value="{{ post.title }}" id="id_title"><br>
-                </div><br>
+    <table>
+        {{ form.as_table }}
+    </table>
 
-                <div>
-                <p>내용:</p>
-                <textarea rows="15" cols="42" name="content">{{ post.content }}</textarea>
-                </div><br>
+    <br><p>
+    {% bootstrap_button "저장" button_type="submit" button_class="btn-primary" %}
+    <a class="btn btn-primary" href="{% url 'view_post' pk=post.pk %}" role="button"> 취소 </a>
+    </p>
+    </form>
+{% endblock %}
 
-                <p>
-                {% bootstrap_button "저장" button_type="submit" button_class="btn-primary" %}
-                <a href="{% url 'view_post' pk=post.pk %}">
-                    <button type="button" class="btn btn-primary">취소</button>
-                </a>
-                </p>
-            </div>
-
-        </form>
-
-        {% endblock %}
+{% comment %}
+{% endcomment %}

@@ -1,4 +1,5 @@
 {% load bootstrap3 %}
+{% load staticfiles %}
 <html>
     <head>
         <title>{% block page_title%}MyWeb에 오신 것을 환영합니다.{% endblock%}</title>
@@ -7,21 +8,26 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
         {% bootstrap_css %}
         {% bootstrap_javascript %}
 
         <style>
             img { max-width: 100%; }
         </style>
-
+{% comment %}
         <font color="grey" size="7">MyWeb (testing)</font>
+{% endcomment %}
+        <img src="{% static "Logo.png" %}" width="200" height="100" align="left">
 
         {% if request.user.is_authenticated %}
-        &emsp;{{ request.user }}님! &nbsp;<a href="{% url 'logout_url' %}" class="btn btn-default btn-xs" role="button"> 로그아웃 </a><br>
-
-        {% else %}
-        &emsp;<a href="{% url 'login_url' %}" class="btn btn-default btn-xm" role="button">로그인</a><br>
-        {% endif %}
+        <br><br><br><br>
+        <div style="text-align:right">{{ request.user }}님!
+            &nbsp;<a href="{% url 'logout_url' %}" class="btn btn-default btn-xs" role="button"> 로그아웃 </a>
+            {% else %}
+            &emsp;<a href="{% url 'login_url' %}" class="btn btn-link btn-lg" role="button">로그인</a>
+            {% endif %}
+        </div>
     </head>
 
     <body class="container">

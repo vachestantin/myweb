@@ -14,7 +14,7 @@ SECRET_KEY = '@gqd@(c#5lf=pn^-jb!tq(u6mojk-nazosmt&j=^)660u5rivb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -117,7 +117,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_deploy') # 얘는 그냥 하나, �
 
 # 개발 환경에서 사용하는 경로
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static_develop'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # media file 설정과 static file 설정이 같으면 안됨
