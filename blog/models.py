@@ -46,7 +46,7 @@ class Tag(models.Model):
      name = models.CharField(max_length=40)
 
      def __str__(self):
-        return '({}) {}'.format(self.pk, self.name)
+        return '{}'.format(self.name)
 
 
 class Category(models.Model):

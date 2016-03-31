@@ -4,9 +4,10 @@
 {% block page_title %}글 목록 {% endblock %}
 
 {% block content %}
+<div>
 <a class="btn btn-default" href="{% url 'create_post' %}"><span class="glyphicon glyphicon-file"></a>
 <a class="btn btn-default" href="{% url 'list_posts' %}"><span class="glyphicon glyphicon-refresh"></span></a>
-<br>
+</div>
 
     {% for post in posts %}
     <div class="post_container">

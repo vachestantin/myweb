@@ -3,10 +3,6 @@ from django.forms import ValidationError
 
 from .models import Post
 
-# class PostForm(fomrs.ModelForm):
-#     class Meta:
-#         model = Post
-#         fields = ('title', 'content', 'photo', 'tag', 'category',)
 
 class PostEditForm(forms.ModelForm):
     class Meta:

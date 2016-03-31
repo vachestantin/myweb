@@ -18,16 +18,19 @@
 {% comment %}
         <font color="grey" size="7">MyWeb (testing)</font>
 {% endcomment %}
+        <br>
         <img src="{% static "Logo.png" %}" width="200" height="100" align="left">
 
-        {% if request.user.is_authenticated %}
         <br><br><br><br>
-        <div style="text-align:right">{{ request.user }}님!
-            &nbsp;<a href="{% url 'logout_url' %}" class="btn btn-default btn-xs" role="button"> 로그아웃 </a>
-            {% else %}
-            &emsp;<a href="{% url 'login_url' %}" class="btn btn-link btn-lg" role="button">로그인</a>
-            {% endif %}
-        </div>
+        {% if request.user.is_authenticated %}
+            <div style="text-align:right">{{ request.user }}님!
+                &nbsp;<a href="{% url 'logout_url' %}" class="btn btn-default btn-xs" role="button"> 로그아웃 </a><br><br>
+            </div>
+        {% else %}
+            <div style="text-align:right">
+                &nbsp;<a href="{% url 'login_url' %}" class="btn btn-link btn-lg" role="button">로그인</a>
+            </div>
+        {% endif %}
     </head>
 
     <body class="container">
