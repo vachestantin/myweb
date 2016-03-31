@@ -6,5 +6,5 @@ final
 
 python -m venv hwenv
 
-pip install django django-bootstrap3 djangorestframework pillow pytz celery redis 
+pip install django django-bootstrap3 pillow pytz celery redis djangorestframework
 
